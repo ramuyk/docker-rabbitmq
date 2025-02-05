@@ -10,10 +10,11 @@ services:
       - "127.0.0.1:5672:5672"  # AMQP protocol port
       - "127.0.0.1:15672:15672"  # Management UI port
       - "127.0.0.1:1883:1883"  # MQTT protocol port
+      - "127.0.0.1:15675:15675"  # MQTT over WebSockets port
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
     command: >
-      bash -c "rabbitmq-plugins enable --offline rabbitmq_mqtt && rabbitmq-server"
+      bash -c "rabbitmq-plugins enable --offline rabbitmq_mqtt rabbitmq_web_mqtt && rabbitmq-server"
     restart: always
 
 volumes:
