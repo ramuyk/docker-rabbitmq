@@ -2,17 +2,22 @@ version: '3.8'
 
 services:
   rabbitmq:
-    image: rabbitmq:3.13.1-management
+    build: .
     environment:
       RABBITMQ_DEFAULT_USER: "rabbitmq"
       RABBITMQ_DEFAULT_PASS: "rabbitmq"
     ports:
-      - "127.0.0.1:5672:5672"  # AMQP protocol port
-      - "127.0.0.1:15672:15672"  # Management UI port
-      - "127.0.0.1:1883:1883"  # MQTT protocol port
-      - "127.0.0.1:15675:15675"  # MQTT over WebSockets port
+      - "127.0.0.1:5672:5672"   # AMQP protocol port
+      - "127.0.0.1:5671:5671"   # AMQP SSL protocol port
+      - "127.0.0.1:15672:15672" # Management UI port
+      - "127.0.0.1:15671:15671" # Management UI SSL port
+      - "127.0.0.1:1883:1883"   # MQTT protocol port
+      - "127.0.0.1:8883:8883"   # MQTT SSL protocol port
+      - "127.0.0.1:15675:15675" # MQTT over WebSockets port
+      - "127.0.0.1:15676:15676" # MQTT over WebSockets SSL port
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
+      - ./volumes/certificates:/host/certificates  # Host-mounted certificate directory
     command: >
       bash -c "rabbitmq-plugins enable --offline rabbitmq_mqtt rabbitmq_web_mqtt && rabbitmq-server"
     restart: always
